@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://behaviorist.io/schema/decision-log/v1",
+  "title": "Checkpoint decision log record",
+  "description": "One record per agentic decision point. The agent side and the human side share a single decision_id, so a team can show not only what the agent did, but why a person was brought in, what they saw, and how they decided.",
+  "type": "object",
+  "required": ["decision_id", "agent", "route"],
+  "properties": {
+    "decision_id": { "type": "string", "description": "Stable identifier linking both sides of the record." },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "agent": {
+      "type": "object",
+      "description": "Agent-side record: what was proposed and how it was scored.",
+      "required": ["proposed_action", "inputs"],
+      "properties": {
+        "agent_id": { "type": "string" },
+        "agent_version": { "type": "string" },
+        "proposed_action": { "type": "string", "description": "Plain-language description of the action at this decision point." },
+        "inputs": {
+          "type": "object",
+          "description": "Checkpoint Scale v1.0 dimension scores, each 1 to 5.",
+          "required": ["reversibility", "consequence_magnitude", "confidence", "precedent", "regulatory_exposure"],
+          "properties": {
+            "reversibility": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "consequence_magnitude": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "confidence": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "precedent": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "regulatory_exposure": { "type": "integer", "minimum": 1, "maximum": 5 }
+          }
+        },
+        "confidence_source": {
+          "type": "string",
+          "description": "Where the confidence value came from. Observable signals are preferred over model self-report.",
+          "enum": ["observable_signals", "model_self_report", "human_estimate"]
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "required": ["recommendation", "rationale"],
+      "properties": {
+        "recommendation": { "type": "string", "enum": ["auto_execute", "log_and_proceed", "hold_for_human"] },
+        "rationale": { "type": "string", "description": "Plain-language reason naming the dimensions that drove the route." }
+      }
+    },
+    "human": {
+      "type": "object",
+      "description": "Human-side record. Present when the route is hold_for_human, or when a logged action is later reviewed.",
+      "properties": {
+        "reviewer_id": { "type": "string" },
+        "shown_to_reviewer": { "type": "string", "description": "What the reviewer actually saw at the moment of decision." },
+        "reasoning_cue": { "type": "string", "description": "The prompt used to move the reviewer from autopilot into deliberate checking." },
+        "decision": { "type": "string", "enum": ["approve", "edit", "reject"] },
+        "time_to_decision_ms": { "type": "integer", "minimum": 0 },
+        "stated_rationale": { "type": "string", "description": "The reviewer's own reason, in their words." }
+      }
+    }
+  }
+}
