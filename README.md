@@ -84,6 +84,10 @@ Checkpoint Copilot links both sides under one decision ID: the agent-side record
 
 That paired record is what lets a team prove oversight actually happened, not just that an approve button was clicked.
 
+## Friction: the human side, in any LLM
+
+[`integrations/friction`](integrations/friction) is an MCP server that brings the scale to the human side of a decision. Routine choices pass through. When a decision scores `hold_for_human`, the assistant withholds its view, asks three challenges, and has the person write their own call first. Works in Claude, ChatGPT, Cursor and any MCP client.
+
 ## What is open and what is not
 
 | Open | Available to API users and research partners |

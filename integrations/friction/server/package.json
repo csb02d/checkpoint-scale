@@ -1,0 +1,20 @@
+{
+  "name": "@behaviorist/friction-mcp",
+  "version": "0.1.0",
+  "description": "Built-in friction for consequential decisions, scored by the Behaviorist Checkpoint Scale",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bin": {
+    "friction-mcp": "index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.6.7"
+  }
+}
